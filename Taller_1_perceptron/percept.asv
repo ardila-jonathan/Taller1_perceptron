@@ -1,0 +1,61 @@
+function [iteraciones] = percept(w0,w1,w2,X1,X2,Y,alpha1,umbral)
+%UNTITLED2 Summary of this function goes here
+%   Detailed explanation goes here
+
+aux=0;
+iteraciones=0;
+while aux<4
+iteraciones=iteraciones+1;
+for i=1:1:4;
+
+suma=X1(i)*w1+X2(i)*w2+w0;
+
+% función de activación
+
+if suma>umbral
+    Ym(i)=max(Y);
+else
+    Ym(i)=min(Y);
+end
+
+error=Y(i)-Ym(i);
+
+if error~=0
+    %corregir
+    Aw0=alpha1*error;
+    Aw1=alpha1*error*X1(i);
+    Aw2=alpha1*error*X2(i);
+
+%     Aw0=Y(i)*1;
+%     Aw1=Y(i)*X1(i);
+%     Aw2=Y(i)*X2(i);
+
+
+    w0=w0+Aw0;
+    w1=w1+Aw1;
+    w2=w2+Aw2;
+    aux=0;
+
+else
+    aux=aux+1;
+end
+end
+end
+end
+
+
+
+% Datos de entrada
+inputs = [0, 0, 1, 1 ; 0, 1, 0 , 1];
+
+% Pesos sinápticos (ejemplo)
+weights = [0.5, 0.5 , 0.5 , 0.5];
+
+% Cálculo de la suma ponderada
+net = inputs * weights';
+
+% Aplicación de la función hardlim
+output = hardlim(net);
+
+% Visualización de la salida
+disp(output)

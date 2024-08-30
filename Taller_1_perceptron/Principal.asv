@@ -1,0 +1,61 @@
+clear all;
+close all;
+clc;
+
+%Deinir dataseets
+
+X0 = [1 1 1 1];
+X1 = [-1 -1 1 1];
+X2 = [-1 1 -1 1];
+Yd = [-1 -1 -1 1];
+
+% Definir pesos
+
+W0 = rand;
+W1 = rand;
+W2 = rand;
+% W0 = .5;
+% W1 = .5;
+% W2 = .5;
+
+% Definir demas variables de iteracion
+
+Ok = 0;
+Iter = 0;
+umbral = 0;
+ciclo = true;
+Yr = zeros(1, 4); % Inicialización del vector de salidas
+
+
+
+while ciclo
+% for j = 1:5    
+for i = 1:4
+   Suma_pon = W0*X0(i) + W1*X1(i) + W2*X2(i);
+   if Suma_pon >= umbral
+       Yr(i) = max(Yd);
+   else
+       Yr(i) = min(Yd);
+   end 
+   error = Yd(i) - Yr(i);
+   
+   if error ~= 0
+       Aw0 = Yd(i)*X0(i);
+       Aw1 = Yd(i)*X1(i);
+       Aw2 = Yd(i)*X2(i);
+
+       W0 = W0 + Aw0;
+       W1 = W1 + Aw1;
+       W2 = W2 + Aw2;
+   end
+end
+Ok = sum(Yd == Yr); % Cuenta cuántas salidas son correctas
+if Ok == 4
+    ciclo = false;
+end
+Iter = Iter + 1;
+
+end
+% disp(Iter);
+
+
